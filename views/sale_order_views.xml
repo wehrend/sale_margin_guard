@@ -21,8 +21,11 @@
                     <attribute name="statusbar_visible">draft,sent,to_approve,sale</attribute>
                 </xpath>
 
-                <xpath expr="//sheet" position="inside">
+                <xpath expr="//field[@name='payment_term_id']" position="after">
                     <field name="margin_alert" invisible="1"/>
+                    <div class="alert alert-danger" role="alert" invisible="not margin_alert" style="margin-bottom: 15px;">
+                        <strong>Margin Warning:</strong> The profit margin of this order is less than 15%. Confirmation requires manager approval!
+                    </div>
                 </xpath>
 
             </field>
@@ -33,15 +36,32 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_quotation_tree"/>
             <field name="arch" type="xml">
-                
                 <xpath expr="//list" position="attributes">
                     <attribute name="decoration-danger">margin_alert == True</attribute>
                 </xpath>
-
                 <xpath expr="//field[@name='state']" position="before">
                     <field name="margin_alert" column_invisible="True"/>
+                    <div class="alert alert-danger" role="alert" invisible="not margin_alert" style="margin-bottom: 15px;">
+                        <strong>Margin Warning:</strong> The profit margin of this order is less than 15%. Confirmation requires manager approval!
+                    </div>
                 </xpath>
+            </field>
+        </record>
 
+        <record id="view_order_list_inherit_margin_guard" model="ir.ui.view">
+            <field name="name">sale.order.list.order.inherit.margin.guard</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//list" position="attributes">
+                    <attribute name="decoration-danger">margin_alert == True</attribute>
+                </xpath>
+                <xpath expr="//field[@name='state']" position="before">
+                    <field name="margin_alert" column_invisible="True"/>
+                    <div class="alert alert-danger" role="alert" invisible="not margin_alert" style="margin-bottom: 15px;">
+                        <strong>Margin Warning:</strong> The profit margin of this order is less than 15%. Confirmation requires manager approval!
+                    </div>
+                </xpath>
             </field>
         </record>
 
