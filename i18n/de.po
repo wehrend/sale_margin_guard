@@ -1,0 +1,73 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sale_margin_guard
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-14 17:52+0000\n"
+"PO-Revision-Date: 2026-06-14 17:52+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_margin_guard
+#: model_terms:ir.ui.view,arch_db:sale_margin_guard.view_order_form_inherit_margin_guard
+msgid "Approve Margin"
+msgstr "Genehmige Marge"
+
+#. module: sale_margin_guard
+#: model:ir.model.fields,field_description:sale_margin_guard.field_sale_order__display_name
+msgid "Display Name"
+msgstr "Anzeigename"
+
+#. module: sale_margin_guard
+#: model:ir.model.fields,field_description:sale_margin_guard.field_sale_order__id
+msgid "ID"
+msgstr ""
+
+#. module: sale_margin_guard
+#: model:ir.model.fields,field_description:sale_margin_guard.field_sale_order__margin_alert
+msgid "Low Margin Alert"
+msgstr "Niedrige Marge Warnung"
+
+#. module: sale_margin_guard
+#. odoo-python
+#: code:addons/sale_margin_guard/models/sale_order.py:0
+msgid "Margin manually approved by %s."
+msgstr "Marge manuell genehmigt durch %s."
+
+#. module: sale_margin_guard
+#. odoo-python
+#: code:addons/sale_margin_guard/models/sale_order.py:0
+msgid "Only Sales Managers can approve this order."
+msgstr "Nur Verkaufsleiter können diese Bestellung genehmigen."
+
+#. module: sale_margin_guard
+#: model:ir.model,name:sale_margin_guard.model_sale_order
+msgid "Sales Order"
+msgstr "Verkaufsauftrag"
+
+#. module: sale_margin_guard
+#: model:ir.model.fields,field_description:sale_margin_guard.field_sale_order__state
+msgid "Status"
+msgstr ""
+
+#. module: sale_margin_guard
+#. odoo-python
+#: code:addons/sale_margin_guard/models/sale_order.py:0
+msgid ""
+"This order has been blocked for confirmation due to a low margin (&lt; 15%)."
+" It requires Manager Approval."
+msgstr ""
+"Diese Bestellung wurde wegen einer niedrigen Marge von &lt;15 % zur Bestätigung blockiert."
+"Es erfordert die Zustimmung des Managers."
+
+#. module: sale_margin_guard
+#: model:ir.model.fields.selection,name:sale_margin_guard.selection__sale_order__state__to_approve
+msgid "Waiting Approval"
+msgstr "Erwarte Genehmigung"
