@@ -53,5 +53,7 @@ class SaleOrder(models.Model):
             raise UserError(_("Only Sales Managers can approve this order."))
 
         self.message_post(body=_("Margin manually approved by %s.") % self.env.user.name)
+        # Temporarily reset to draft so action_confirm can run its full logic
+        # (stock moves, confirmation email, etc.) — not a visible state change
         self.write({'state': 'draft'})
         return super(SaleOrder, self).action_confirm()
