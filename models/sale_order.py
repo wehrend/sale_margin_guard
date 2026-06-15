@@ -11,41 +11,47 @@ class SaleOrder(models.Model):
     ], ondelete={'to_approve': 'set default'})
 
     margin_alert = fields.Boolean(
-        string="Low Margin Alert", 
-        compute="_compute_margin_alert", 
-        store=True
+        string="Low Margin Alert",
+        compute="_compute_margin_alert",
     )
+
+    def _get_min_margin(self):
+        value = self.env['ir.config_parameter'].sudo().get_param(
+            'sale_margin_guard.min_sales_margin', default=15.0
+        )
+        return float(value) / 100.0
+
+    def _has_low_margin(self):
+        """Returns True if any order line is below the minimum margin threshold."""
+        min_margin = self._get_min_margin()
+        for line in self.order_line:
+            if line.product_id and line.price_unit > 0:
+                cost = line.product_id.standard_price
+                margin = (line.price_unit - cost) / line.price_unit
+                if margin < min_margin:
+                    return True
+        return False
 
     @api.depends('order_line.price_unit', 'order_line.product_id')
     def _compute_margin_alert(self):
         for order in self:
-            alert = False
-            for line in order.order_line:
-                # block division by zero and check only real products
-                if line.product_id and line.price_unit > 0:
-                    # fetch standard price from product
-                    cost = line.product_id.standard_price
-                    margin = (line.price_unit - cost) / line.price_unit
-                    
-                    if margin < 0.15:
-                        alert = True
-                        break
-            order.margin_alert = alert
+            order.margin_alert = order._has_low_margin()
 
     def action_confirm(self):
-        if self.margin_alert and self.state != 'to_approve':
+        if self._has_low_margin():
             if not self.env.user.has_group('sales_team.group_sale_manager'):
                 self.write({'state': 'to_approve'})
-                self.message_post(body=_("This order has been blocked for confirmation due to a low margin (&lt; 15%). It requires Manager Approval."))
+                self.message_post(body=_("This order has been blocked due to a low margin. It requires Manager Approval."))
                 return False
-                
+
         return super(SaleOrder, self).action_confirm()
 
     def action_approve_margin(self):
-        """ Allow managers manuall approval"""
+        """Allow managers manual approval."""
         self.ensure_one()
         if not self.env.user.has_group('sales_team.group_sale_manager'):
             raise UserError(_("Only Sales Managers can approve this order."))
-        
+
         self.message_post(body=_("Margin manually approved by %s.") % self.env.user.name)
+        self.write({'state': 'draft'})
         return super(SaleOrder, self).action_confirm()
